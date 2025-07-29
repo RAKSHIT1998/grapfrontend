@@ -9,4 +9,5 @@ npm install
 npx expo start
 ```
 
-The backend server from the project root should be running so that API requests for restaurants and driver location succeed.
+Keep the backend server from the project root running so that API requests for
+signup, login, restaurant data, order creation and driver location succeed.

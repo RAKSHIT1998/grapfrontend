@@ -33,8 +33,9 @@ Open `index.html` in your browser to explore the different services. Each
 section is a minimal mock screen that demonstrates basic navigation between the
 home page and the individual services.
 
-Authentication is handled via simple in-memory API endpoints, and orders are persisted on the backend.
-After checking out, the cart items are sent to `/api/orders` which stores the
+Authentication and order management are handled via the included Node backend.
+Sign up and login send requests to `/api/users/signup` and `/api/users/login`.
+After checking out, the cart items are posted to `/api/orders` which stores the
 order in memory. The driver tracking screen requests location updates from your
 backend at `/api/driver`.
 
@@ -51,4 +52,5 @@ npm install
 npx expo start
 ```
 
-The API endpoints from the Node server should remain accessible for restaurant data, order storage and driver tracking.
+The Expo app relies on the same API server for authentication, restaurant data,
+order storage and driver tracking so keep the Node backend running.

@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-nativ
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+const API_BASE = 'http://localhost:3000';
+
 function BackButton({ onBack }) {
   return <Button title="Back" onPress={onBack} />;
 }
@@ -41,13 +43,31 @@ function Home({ navigation, user, onLogout }) {
 function Signup({ navigation, onSignup }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const handleSignup = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/users/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      if (!res.ok) throw new Error('Signup failed');
+      const data = await res.json();
+      onSignup({ username: data.username, profile: data.profile });
+      navigation.goBack();
+    } catch (e) {
+      console.log(e);
+      alert('Failed to sign up');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Sign Up</Text>
       <TextInput placeholder="Username" value={username} onChangeText={setUsername} style={styles.input} />
       <TextInput placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
-      <Button title="Sign Up" onPress={() => { onSignup({ username }); navigation.goBack(); }} />
+      <Button title="Sign Up" onPress={handleSignup} />
     </View>
   );
 }
@@ -55,13 +75,30 @@ function Signup({ navigation, onSignup }) {
 function Login({ navigation, onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const handleLogin = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/users/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      if (!res.ok) throw new Error('Login failed');
+      const data = await res.json();
+      onLogin({ username: data.username, profile: data.profile });
+      navigation.goBack();
+    } catch (e) {
+      console.log(e);
+      alert('Failed to login');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Login</Text>
       <TextInput placeholder="Username" value={username} onChangeText={setUsername} style={styles.input} />
       <TextInput placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
-      <Button title="Login" onPress={() => { onLogin({ username }); navigation.goBack(); }} />
+      <Button title="Login" onPress={handleLogin} />
     </View>
   );
 }
@@ -81,6 +118,23 @@ function Settings({ navigation, settings, onUpdate }) {
 }
 
 function Payment({ navigation, items, onPay }) {
+  const handlePay = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items })
+      });
+      if (!res.ok) throw new Error('Payment failed');
+      alert('Payment completed. Order placed!');
+      onPay();
+      navigation.goBack();
+    } catch (e) {
+      console.log(e);
+      alert('Payment failed.');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <BackButton onBack={() => navigation.goBack()} />
@@ -96,7 +150,7 @@ function Payment({ navigation, items, onPay }) {
       ) : (
         <Text style={styles.text}>Cart is empty</Text>
       )}
-      <Button title="Pay Now" disabled={!items.length} onPress={() => { alert('Payment completed (simulated).'); onPay(); navigation.goBack(); }} />
+      <Button title="Pay Now" disabled={!items.length} onPress={handlePay} />
     </View>
   );
 }
@@ -130,7 +184,7 @@ function OrderTracking({ navigation }) {
   useEffect(() => {
     const id = setInterval(async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/driver');
+        const res = await fetch(`${API_BASE}/api/driver`);
         if (res.ok) {
           setPosition(await res.json());
         }
@@ -155,7 +209,7 @@ function FoodDelivery({ navigation, onAdd }) {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/restaurants');
+        const res = await fetch(`${API_BASE}/api/restaurants`);
         if (res.ok) {
           setRestaurants(await res.json());
         }
