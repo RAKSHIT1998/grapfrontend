@@ -11,6 +11,7 @@ delivery within one lightweight app.
 - **Signup/Login** – minimal user authentication forms
 - **Settings** – stores user location and currency preferences in memory
 - **Payment** – simulated payment flow
+- **Orders** – view a list of previously paid orders
 - **Order Tracking** – displays driver location updates using Leaflet
 - **Food Delivery** – fetches a list of restaurants from `/api/restaurants`
 - **Taxi Service** – book a car by specifying pickup and dropoff
