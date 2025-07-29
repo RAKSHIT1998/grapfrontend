@@ -19,7 +19,7 @@ import BackButton from "./components/BackButton.js";
 function Settings({ onBack, settings, onUpdate }) {
   const [location, setLocation] = React.useState(settings.location || '');
   const [currency, setCurrency] = React.useState(settings.currency || 'USD');
-  const [theme, setTheme] = React.useState(settings.theme || 'light');
+  const [theme, setTheme] = React.useState(settings.theme || 'future');
   return React.createElement('div', null,
     BackButton({ onBack }),
     React.createElement('h2', null, 'Customer Settings'),
@@ -48,7 +48,8 @@ function Settings({ onBack, settings, onUpdate }) {
         onChange: e => setTheme(e.target.value)
       },
         React.createElement('option', { value: 'light' }, 'Light'),
-        React.createElement('option', { value: 'dark' }, 'Dark')
+        React.createElement('option', { value: 'dark' }, 'Dark'),
+        React.createElement('option', { value: 'future' }, 'Future 2025')
       )
     ),
     React.createElement('button', {
@@ -84,11 +85,11 @@ function Cart({ onBack, items, onCheckout, onRemove }) {
 function App() {
   const [page, setPage] = React.useState('home');
   const [user, setUser] = React.useState(null);
-  const [settings, setSettings] = React.useState({ location: '', currency: 'USD', theme: 'light' });
+  const [settings, setSettings] = React.useState({ location: '', currency: 'USD', theme: 'future' });
   const [cart, setCart] = React.useState([]);
 
   React.useEffect(() => {
-    document.body.dataset.theme = settings.theme || 'light';
+    document.body.dataset.theme = settings.theme || 'future';
   }, [settings.theme]);
 
   const addToCart = item => setCart(c => [...c, item]);

@@ -10,8 +10,8 @@ function BackButton({ onBack }) {
 function Home({ navigation, user, onLogout }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>grap</Text>
-      {user && <Text>Welcome, {user.username}</Text>}
+      <Text style={styles.title}>grap 2025</Text>
+      {user && <Text style={styles.text}>Welcome, {user.username}</Text>}
       <Button title="Restaurant Delivery" onPress={() => navigation.navigate('Food')} />
       <Button title="Taxi Service" onPress={() => navigation.navigate('Taxi')} />
       <Button title="Mart Delivery" onPress={() => navigation.navigate('Mart')} />
@@ -90,11 +90,11 @@ function Payment({ navigation, items, onPay }) {
           data={items}
           keyExtractor={(_, i) => String(i)}
           renderItem={({ item }) => (
-            <Text>{item.name} x {item.qty}</Text>
+            <Text style={styles.text}>{item.name} x {item.qty}</Text>
           )}
         />
       ) : (
-        <Text>Cart is empty</Text>
+        <Text style={styles.text}>Cart is empty</Text>
       )}
       <Button title="Pay Now" disabled={!items.length} onPress={() => { alert('Payment completed (simulated).'); onPay(); navigation.goBack(); }} />
     </View>
@@ -112,13 +112,13 @@ function Cart({ navigation, items, onCheckout, onRemove }) {
           keyExtractor={(_, i) => String(i)}
           renderItem={({ item, index }) => (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ marginRight: 8 }}>{item.name} x {item.qty}</Text>
+              <Text style={[styles.text, { marginRight: 8 }]}>{item.name} x {item.qty}</Text>
               <Button title="Remove" onPress={() => onRemove(index)} />
             </View>
           )}
         />
       ) : (
-        <Text>Cart is empty</Text>
+        <Text style={styles.text}>Cart is empty</Text>
       )}
       <Button title="Checkout" disabled={!items.length} onPress={() => onCheckout()} />
     </View>
@@ -144,8 +144,8 @@ function OrderTracking({ navigation }) {
     <View style={styles.container}>
       <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Driver Position</Text>
-      <Text>Lat: {position.lat.toFixed(5)}</Text>
-      <Text>Lng: {position.lng.toFixed(5)}</Text>
+      <Text style={styles.text}>Lat: {position.lat.toFixed(5)}</Text>
+      <Text style={styles.text}>Lng: {position.lng.toFixed(5)}</Text>
     </View>
   );
 }
@@ -174,7 +174,7 @@ function FoodDelivery({ navigation, onAdd }) {
         keyExtractor={item => String(item.id)}
         renderItem={({ item }) => (
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ marginRight: 8 }}>{item.name}</Text>
+            <Text style={[styles.text, { marginRight: 8 }]}>{item.name}</Text>
             <Button title="Add" onPress={() => onAdd({ name: item.name, qty: 1 })} />
           </View>
         )}
@@ -315,24 +315,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 16,
-    backgroundColor: '#fff'
+    backgroundColor: '#0f172a'
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 16,
-    color: '#00b14f'
+    color: '#38bdf8'
   },
   subtitle: {
-    fontSize: 20,
+    fontSize: 22,
     marginVertical: 12,
-    color: '#00b14f'
+    color: '#38bdf8'
+  },
+  text: {
+    color: '#e2e8f0'
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#555',
     padding: 8,
     width: '80%',
-    marginVertical: 4
+    marginVertical: 4,
+    color: '#e2e8f0'
   }
 });

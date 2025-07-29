@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 body[data-theme='dark'] {
   background-color: #222;
@@ -9,6 +9,21 @@ body[data-theme='dark'] {
 body[data-theme='light'] {
   background-color: #fff;
   color: #000;
+}
+body[data-theme='future'] {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #e0f2ff;
+}
+body[data-theme='future'] h1,
+body[data-theme='future'] h2 {
+  color: #38bdf8;
+}
+body[data-theme='future'] button {
+  background-color: #1e3a8a;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
 }
 button {
   margin: 4px;
