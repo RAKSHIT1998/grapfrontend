@@ -11,8 +11,12 @@ provides placeholder screens for:
 - Bike taxi service with ride booking form
 - User signup and login
 - Payment flow (simulated)
+- Simple cart with checkout
 - Interactive driver location tracking map
 - Customer settings for location and currency
+
+Items selected from the service screens can be added to a small in-memory cart.
+The cart page allows reviewing items and leads to the simulated payment flow.
 
 The food delivery page fetches restaurant data from `/api/restaurants`. The
 driver tracking view polls `/api/driver` for current location updates.

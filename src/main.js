@@ -25,6 +25,9 @@ function Home({ onNavigate, user, onLogout }) {
         React.createElement('li', null,
           React.createElement('button', { onClick: () => onNavigate('bike') }, 'Bike Taxi')
         ),
+        React.createElement('li', null,
+          React.createElement('button', { onClick: () => onNavigate('cart') }, 'Cart')
+        ),
         user ? React.createElement('li', null,
           React.createElement('button', { onClick: () => onNavigate('payment') }, 'Payment')
         ) : null,
@@ -125,12 +128,39 @@ function Settings({ onBack, settings, onUpdate }) {
   );
 }
 
-function Payment({ onBack }) {
-  const handlePay = () => alert('Payment completed (simulated).');
+function Payment({ onBack, items, onPay }) {
+  const handlePay = () => {
+    alert('Payment completed (simulated).');
+    onPay();
+  };
+
   return React.createElement('div', null,
     BackButton({ onBack }),
     React.createElement('h2', null, 'Payment'),
-    React.createElement('button', { onClick: handlePay }, 'Pay Now')
+    items.length
+      ? React.createElement('ul', null,
+          items.map((it, idx) =>
+            React.createElement('li', { key: idx }, `${it.name} x ${it.qty}`)
+          )
+        )
+      : React.createElement('p', null, 'Cart is empty'),
+    React.createElement('button', { onClick: handlePay, disabled: !items.length }, 'Pay Now')
+  );
+}
+
+function Cart({ onBack, items, onCheckout, onRemove }) {
+  return React.createElement('div', null,
+    BackButton({ onBack }),
+    React.createElement('h2', null, 'Cart'),
+    items.length
+      ? React.createElement('ul', null,
+          items.map((it, idx) => React.createElement('li', { key: idx },
+            `${it.name} x ${it.qty} `,
+            React.createElement('button', { onClick: () => onRemove(idx) }, 'Remove')
+          ))
+        )
+      : React.createElement('p', null, 'Cart is empty'),
+    React.createElement('button', { onClick: onCheckout, disabled: !items.length }, 'Checkout')
   );
 }
 
@@ -177,7 +207,7 @@ function OrderTracking({ onBack }) {
   );
 }
 
-function FoodDelivery({ onBack }) {
+function FoodDelivery({ onBack, onAdd }) {
   const [restaurants, setRestaurants] = React.useState([]);
 
   React.useEffect(() => {
@@ -201,7 +231,11 @@ function FoodDelivery({ onBack }) {
     restaurants.length
       ? React.createElement('ul', null,
           restaurants.map(r =>
-            React.createElement('li', { key: r.id }, r.name)
+            React.createElement('li', { key: r.id },
+              r.name,
+              ' ',
+              React.createElement('button', { onClick: () => onAdd({ name: r.name, qty: 1 }) }, 'Add')
+            )
           )
         )
       : React.createElement('p', null, 'Loading...')
@@ -235,11 +269,12 @@ function TaxiService({ onBack }) {
   );
 }
 
-function MartDelivery({ onBack }) {
+function MartDelivery({ onBack, onAdd }) {
   const [item, setItem] = React.useState('');
   const [quantity, setQuantity] = React.useState('1');
-  const order = () => {
-    alert(`Ordered ${quantity} x ${item}`);
+  const add = () => {
+    if (!item) return;
+    onAdd({ name: item, qty: quantity });
     setItem('');
     setQuantity('1');
   };
@@ -258,7 +293,7 @@ function MartDelivery({ onBack }) {
         value: quantity,
         onChange: e => setQuantity(e.target.value)
       }),
-      React.createElement('button', { onClick: order }, 'Place Order')
+      React.createElement('button', { onClick: add }, 'Add to Cart')
     )
   );
 }
@@ -297,11 +332,12 @@ function PorterService({ onBack }) {
   );
 }
 
-function MedicineDelivery({ onBack }) {
+function MedicineDelivery({ onBack, onAdd }) {
   const [medicine, setMedicine] = React.useState('');
   const [quantity, setQuantity] = React.useState('1');
-  const order = () => {
-    alert(`Ordered ${quantity} x ${medicine}`);
+  const add = () => {
+    if (!medicine) return;
+    onAdd({ name: medicine, qty: quantity });
     setMedicine('');
     setQuantity('1');
   };
@@ -320,7 +356,7 @@ function MedicineDelivery({ onBack }) {
         value: quantity,
         onChange: e => setQuantity(e.target.value)
       }),
-      React.createElement('button', { onClick: order }, 'Order Now')
+      React.createElement('button', { onClick: add }, 'Add to Cart')
     )
   );
 }
@@ -356,6 +392,11 @@ function App() {
   const [page, setPage] = React.useState('home');
   const [user, setUser] = React.useState(null);
   const [settings, setSettings] = React.useState({ location: '', currency: 'USD' });
+  const [cart, setCart] = React.useState([]);
+
+  const addToCart = item => setCart(c => [...c, item]);
+  const removeFromCart = idx => setCart(c => c.filter((_, i) => i !== idx));
+  const clearCart = () => setCart([]);
 
   const onBack = () => setPage('home');
   const handleAuth = u => { setUser(u); setPage('home'); };
@@ -370,19 +411,21 @@ function App() {
     case 'settings':
       return Settings({ onBack, settings, onUpdate: handleSettings });
     case 'payment':
-      return Payment({ onBack });
+      return Payment({ onBack, items: cart, onPay: () => { clearCart(); setPage('home'); } });
+    case 'cart':
+      return Cart({ onBack, items: cart, onCheckout: () => setPage('payment'), onRemove: removeFromCart });
     case 'tracking':
       return OrderTracking({ onBack });
     case 'food':
-      return FoodDelivery({ onBack });
+      return FoodDelivery({ onBack, onAdd: addToCart });
     case 'taxi':
       return TaxiService({ onBack });
     case 'mart':
-      return MartDelivery({ onBack });
+      return MartDelivery({ onBack, onAdd: addToCart });
     case 'porter':
       return PorterService({ onBack });
     case 'medicine':
-      return MedicineDelivery({ onBack });
+      return MedicineDelivery({ onBack, onAdd: addToCart });
     case 'bike':
       return BikeTaxiService({ onBack });
     default:
