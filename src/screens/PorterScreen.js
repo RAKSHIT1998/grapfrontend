@@ -1,12 +1,14 @@
 import React from 'https://esm.sh/react@18';
 import BackButton from '../components/BackButton.js';
 
-export default function PorterScreen({ onBack }) {
+export default function PorterScreen({ onBack, onOrder }) {
   const [pickup, setPickup] = React.useState('');
   const [dropoff, setDropoff] = React.useState('');
   const [description, setDescription] = React.useState('');
   const book = () => {
-    alert(`Porter booked: ${description} from ${pickup} to ${dropoff}`);
+    if (!pickup || !dropoff || !description) return;
+    alert('Porter notified!');
+    onOrder({ name: `Porter: ${description}`, qty: 1, price: 12 });
     setPickup('');
     setDropoff('');
     setDescription('');

@@ -1,12 +1,12 @@
 import React from 'https://esm.sh/react@18';
 import BackButton from '../components/BackButton.js';
 
-export default function MartScreen({ onBack, onAdd }) {
+export default function MartScreen({ onBack, onOrder }) {
   const [item, setItem] = React.useState('');
   const [quantity, setQuantity] = React.useState('1');
   const add = () => {
     if (!item) return;
-    onAdd({ name: item, qty: quantity });
+    onOrder({ name: item, qty: quantity, price: 5 });
     setItem('');
     setQuantity('1');
   };
@@ -25,7 +25,7 @@ export default function MartScreen({ onBack, onAdd }) {
         value: quantity,
         onChange: e => setQuantity(e.target.value)
       }),
-      React.createElement('button', { onClick: add }, 'Add to Cart')
+      React.createElement('button', { onClick: add }, 'Checkout')
     )
   );
 }

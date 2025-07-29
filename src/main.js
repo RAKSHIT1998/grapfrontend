@@ -118,6 +118,7 @@ function App() {
   const addToCart = item => setCart(c => [...c, item]);
   const removeFromCart = idx => setCart(c => c.filter((_, i) => i !== idx));
   const clearCart = () => setCart([]);
+  const checkoutItem = item => { setCart([item]); setPage('payment'); };
 
   const onBack = () => setPage('home');
   const handleAuth = u => { setUser(u); setPage('home'); };
@@ -143,17 +144,17 @@ function App() {
     case 'orders':
       return OrdersScreen({ onBack });
     case 'food':
-      return FoodDeliveryScreen({ onBack, onAdd: addToCart });
+      return FoodDeliveryScreen({ onBack, onOrder: checkoutItem });
     case 'taxi':
-      return TaxiScreen({ onBack });
+      return TaxiScreen({ onBack, onOrder: checkoutItem });
     case 'mart':
-      return MartScreen({ onBack, onAdd: addToCart });
+      return MartScreen({ onBack, onOrder: checkoutItem });
     case 'porter':
-      return PorterScreen({ onBack });
+      return PorterScreen({ onBack, onOrder: checkoutItem });
     case 'medicine':
-      return MedicineScreen({ onBack, onAdd: addToCart });
+      return MedicineScreen({ onBack, onOrder: checkoutItem });
     case 'bike':
-      return BikeTaxiScreen({ onBack });
+      return BikeTaxiScreen({ onBack, onOrder: checkoutItem });
     default:
       return HomeScreen({ onNavigate: setPage, user, onLogout: handleLogout });
   }

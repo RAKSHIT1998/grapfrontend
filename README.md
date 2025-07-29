@@ -23,8 +23,10 @@ The food delivery page fetches restaurant data from `/api/restaurants`. The
 driver tracking view polls `/api/driver` for current location updates.
 
 Each service page now includes a minimal form so you can simulate placing
-orders or booking rides directly in the browser. These actions simply trigger
-alerts but demonstrate the expected user flow for a combined super-app.
+orders or booking rides directly in the browser. After selecting a service the
+app immediately redirects to the payment screen with the chosen item so the
+flow mirrors a real checkout. Drivers are "notified" via on-screen alerts when
+a ride or delivery is booked.
 
 Open `index.html` in your browser to explore the different services. Each
 section is a minimal mock screen that demonstrates basic navigation between the

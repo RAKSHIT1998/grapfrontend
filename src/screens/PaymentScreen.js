@@ -25,7 +25,12 @@ export default function PaymentScreen({ onBack, items, onPay }) {
     items.length
       ? React.createElement('ul', null,
           items.map((it, idx) =>
-            React.createElement('li', { key: idx }, `${it.name} x ${it.qty}`)
+            React.createElement(
+              'li',
+              { key: idx },
+              `${it.name} x ${it.qty}`,
+              it.price ? ` - $${it.price}` : ''
+            )
           )
         )
       : React.createElement('p', null, 'Cart is empty'),
