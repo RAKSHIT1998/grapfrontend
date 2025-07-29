@@ -30,9 +30,10 @@ Open `index.html` in your browser to explore the different services. Each
 section is a minimal mock screen that demonstrates basic navigation between the
 home page and the individual services.
 
-Authentication and payment remain simulated in-memory, but the driver tracking
-screen now requests location updates from your backend. The frontend expects an
-endpoint at `/api/driver` that returns JSON with `lat` and `lng` values.
+Authentication remains simulated, but orders are now persisted on the backend.
+After checking out, the cart items are sent to `/api/orders` which stores the
+order in memory. The driver tracking screen requests location updates from your
+backend at `/api/driver`.
 
 No build step is required as the app still pulls React and other libraries from
 CDNs.
@@ -47,4 +48,4 @@ npm install
 npx expo start
 ```
 
-The API endpoints from the Node server should remain accessible for restaurant data and driver tracking.
+The API endpoints from the Node server should remain accessible for restaurant data, order storage and driver tracking.

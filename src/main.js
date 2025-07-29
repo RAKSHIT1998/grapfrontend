@@ -114,7 +114,6 @@ function App() {
   const [user, setUser] = React.useState(null);
   const [settings, setSettings] = React.useState({ location: '', currency: 'USD' });
   const [cart, setCart] = React.useState([]);
-  const [orders, setOrders] = React.useState([]);
 
   const addToCart = item => setCart(c => [...c, item]);
   const removeFromCart = idx => setCart(c => c.filter((_, i) => i !== idx));
@@ -134,7 +133,6 @@ function App() {
       return Settings({ onBack, settings, onUpdate: handleSettings });
     case 'payment':
       return PaymentScreen({ onBack, items: cart, onPay: () => {
-        setOrders(o => [...o, { id: Date.now(), items: cart, status: 'Pending' }]);
         clearCart();
         setPage('orders');
       } });
@@ -143,7 +141,7 @@ function App() {
     case 'tracking':
       return TrackingScreen({ onBack });
     case 'orders':
-      return OrdersScreen({ onBack, orders });
+      return OrdersScreen({ onBack });
     case 'food':
       return FoodDeliveryScreen({ onBack, onAdd: addToCart });
     case 'taxi':
