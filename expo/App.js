@@ -1,87 +1,89 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 function BackButton({ onBack }) {
   return <Button title="Back" onPress={onBack} />;
 }
 
-function Home({ onNavigate, user, onLogout }) {
+function Home({ navigation, user, onLogout }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Grab Style App</Text>
       {user && <Text>Welcome, {user.username}</Text>}
-      <Button title="Restaurant Delivery" onPress={() => onNavigate('food')} />
-      <Button title="Taxi Service" onPress={() => onNavigate('taxi')} />
-      <Button title="Mart Delivery" onPress={() => onNavigate('mart')} />
-      <Button title="Porter Service" onPress={() => onNavigate('porter')} />
-      <Button title="Medicine Delivery" onPress={() => onNavigate('medicine')} />
-      <Button title="Bike Taxi" onPress={() => onNavigate('bike')} />
-      <Button title="Cart" onPress={() => onNavigate('cart')} />
+      <Button title="Restaurant Delivery" onPress={() => navigation.navigate('Food')} />
+      <Button title="Taxi Service" onPress={() => navigation.navigate('Taxi')} />
+      <Button title="Mart Delivery" onPress={() => navigation.navigate('Mart')} />
+      <Button title="Porter Service" onPress={() => navigation.navigate('Porter')} />
+      <Button title="Medicine Delivery" onPress={() => navigation.navigate('Medicine')} />
+      <Button title="Bike Taxi" onPress={() => navigation.navigate('Bike')} />
+      <Button title="Cart" onPress={() => navigation.navigate('Cart')} />
       {user && (
         <>
-          <Button title="Payment" onPress={() => onNavigate('payment')} />
-          <Button title="Track Driver" onPress={() => onNavigate('tracking')} />
+          <Button title="Payment" onPress={() => navigation.navigate('Payment')} />
+          <Button title="Track Driver" onPress={() => navigation.navigate('Tracking')} />
         </>
       )}
-      <Button title="Settings" onPress={() => onNavigate('settings')} />
+      <Button title="Settings" onPress={() => navigation.navigate('Settings')} />
       {user ? (
         <Button title="Logout" onPress={onLogout} />
       ) : (
         <>
-          <Button title="Login" onPress={() => onNavigate('login')} />
-          <Button title="Sign Up" onPress={() => onNavigate('signup')} />
+          <Button title="Login" onPress={() => navigation.navigate('Login')} />
+          <Button title="Sign Up" onPress={() => navigation.navigate('Signup')} />
         </>
       )}
     </View>
   );
 }
 
-function Signup({ onBack, onSignup }) {
+function Signup({ navigation, onSignup }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   return (
     <View style={styles.container}>
-      <BackButton onBack={onBack} />
+      <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Sign Up</Text>
       <TextInput placeholder="Username" value={username} onChangeText={setUsername} style={styles.input} />
       <TextInput placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
-      <Button title="Sign Up" onPress={() => onSignup({ username })} />
+      <Button title="Sign Up" onPress={() => { onSignup({ username }); navigation.goBack(); }} />
     </View>
   );
 }
 
-function Login({ onBack, onLogin }) {
+function Login({ navigation, onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   return (
     <View style={styles.container}>
-      <BackButton onBack={onBack} />
+      <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Login</Text>
       <TextInput placeholder="Username" value={username} onChangeText={setUsername} style={styles.input} />
       <TextInput placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
-      <Button title="Login" onPress={() => onLogin({ username })} />
+      <Button title="Login" onPress={() => { onLogin({ username }); navigation.goBack(); }} />
     </View>
   );
 }
 
-function Settings({ onBack, settings, onUpdate }) {
+function Settings({ navigation, settings, onUpdate }) {
   const [location, setLocation] = useState(settings.location || '');
   const [currency, setCurrency] = useState(settings.currency || 'USD');
   return (
     <View style={styles.container}>
-      <BackButton onBack={onBack} />
+      <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Customer Settings</Text>
       <TextInput placeholder="Location" value={location} onChangeText={setLocation} style={styles.input} />
       <TextInput placeholder="Currency" value={currency} onChangeText={setCurrency} style={styles.input} />
-      <Button title="Save" onPress={() => onUpdate({ location, currency })} />
+      <Button title="Save" onPress={() => { onUpdate({ location, currency }); navigation.goBack(); }} />
     </View>
   );
 }
 
-function Payment({ onBack, items, onPay }) {
+function Payment({ navigation, items, onPay }) {
   return (
     <View style={styles.container}>
-      <BackButton onBack={onBack} />
+      <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Payment</Text>
       {items.length ? (
         <FlatList
@@ -94,15 +96,15 @@ function Payment({ onBack, items, onPay }) {
       ) : (
         <Text>Cart is empty</Text>
       )}
-      <Button title="Pay Now" disabled={!items.length} onPress={() => { alert('Payment completed (simulated).'); onPay(); }} />
+      <Button title="Pay Now" disabled={!items.length} onPress={() => { alert('Payment completed (simulated).'); onPay(); navigation.goBack(); }} />
     </View>
   );
 }
 
-function Cart({ onBack, items, onCheckout, onRemove }) {
+function Cart({ navigation, items, onCheckout, onRemove }) {
   return (
     <View style={styles.container}>
-      <BackButton onBack={onBack} />
+      <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Cart</Text>
       {items.length ? (
         <FlatList
@@ -118,12 +120,12 @@ function Cart({ onBack, items, onCheckout, onRemove }) {
       ) : (
         <Text>Cart is empty</Text>
       )}
-      <Button title="Checkout" disabled={!items.length} onPress={onCheckout} />
+      <Button title="Checkout" disabled={!items.length} onPress={() => onCheckout()} />
     </View>
   );
 }
 
-function OrderTracking({ onBack }) {
+function OrderTracking({ navigation }) {
   const [position, setPosition] = useState({ lat: 1.29, lng: 103.85 });
   useEffect(() => {
     const id = setInterval(async () => {
@@ -140,7 +142,7 @@ function OrderTracking({ onBack }) {
   }, []);
   return (
     <View style={styles.container}>
-      <BackButton onBack={onBack} />
+      <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Driver Position</Text>
       <Text>Lat: {position.lat.toFixed(5)}</Text>
       <Text>Lng: {position.lng.toFixed(5)}</Text>
@@ -148,7 +150,7 @@ function OrderTracking({ onBack }) {
   );
 }
 
-function FoodDelivery({ onBack, onAdd }) {
+function FoodDelivery({ navigation, onAdd }) {
   const [restaurants, setRestaurants] = useState([]);
   useEffect(() => {
     const load = async () => {
@@ -165,7 +167,7 @@ function FoodDelivery({ onBack, onAdd }) {
   }, []);
   return (
     <View style={styles.container}>
-      <BackButton onBack={onBack} />
+      <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Restaurant Delivery</Text>
       <FlatList
         data={restaurants}
@@ -181,12 +183,12 @@ function FoodDelivery({ onBack, onAdd }) {
   );
 }
 
-function TaxiService({ onBack }) {
+function TaxiService({ navigation }) {
   const [pickup, setPickup] = useState('');
   const [dropoff, setDropoff] = useState('');
   return (
     <View style={styles.container}>
-      <BackButton onBack={onBack} />
+      <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Taxi Service</Text>
       <TextInput placeholder="Pick-up location" value={pickup} onChangeText={setPickup} style={styles.input} />
       <TextInput placeholder="Drop-off location" value={dropoff} onChangeText={setDropoff} style={styles.input} />
@@ -195,12 +197,12 @@ function TaxiService({ onBack }) {
   );
 }
 
-function MartDelivery({ onBack, onAdd }) {
+function MartDelivery({ navigation, onAdd }) {
   const [item, setItem] = useState('');
   const [quantity, setQuantity] = useState('1');
   return (
     <View style={styles.container}>
-      <BackButton onBack={onBack} />
+      <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Mart Delivery</Text>
       <TextInput placeholder="Item" value={item} onChangeText={setItem} style={styles.input} />
       <TextInput placeholder="Quantity" value={quantity} onChangeText={setQuantity} style={styles.input} keyboardType="numeric" />
@@ -209,13 +211,13 @@ function MartDelivery({ onBack, onAdd }) {
   );
 }
 
-function PorterService({ onBack }) {
+function PorterService({ navigation }) {
   const [pickup, setPickup] = useState('');
   const [dropoff, setDropoff] = useState('');
   const [description, setDescription] = useState('');
   return (
     <View style={styles.container}>
-      <BackButton onBack={onBack} />
+      <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Porter Service</Text>
       <TextInput placeholder="Package description" value={description} onChangeText={setDescription} style={styles.input} />
       <TextInput placeholder="Pick-up address" value={pickup} onChangeText={setPickup} style={styles.input} />
@@ -225,12 +227,12 @@ function PorterService({ onBack }) {
   );
 }
 
-function MedicineDelivery({ onBack, onAdd }) {
+function MedicineDelivery({ navigation, onAdd }) {
   const [medicine, setMedicine] = useState('');
   const [quantity, setQuantity] = useState('1');
   return (
     <View style={styles.container}>
-      <BackButton onBack={onBack} />
+      <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Medicine Delivery</Text>
       <TextInput placeholder="Medicine name" value={medicine} onChangeText={setMedicine} style={styles.input} />
       <TextInput placeholder="Quantity" value={quantity} onChangeText={setQuantity} style={styles.input} keyboardType="numeric" />
@@ -239,12 +241,12 @@ function MedicineDelivery({ onBack, onAdd }) {
   );
 }
 
-function BikeTaxiService({ onBack }) {
+function BikeTaxiService({ navigation }) {
   const [pickup, setPickup] = useState('');
   const [dropoff, setDropoff] = useState('');
   return (
     <View style={styles.container}>
-      <BackButton onBack={onBack} />
+      <BackButton onBack={() => navigation.goBack()} />
       <Text style={styles.subtitle}>Bike Taxi Service</Text>
       <TextInput placeholder="Pick-up point" value={pickup} onChangeText={setPickup} style={styles.input} />
       <TextInput placeholder="Drop-off point" value={dropoff} onChangeText={setDropoff} style={styles.input} />
@@ -253,8 +255,9 @@ function BikeTaxiService({ onBack }) {
   );
 }
 
+const Stack = createNativeStackNavigator();
+
 export default function App() {
-  const [page, setPage] = useState('home');
   const [user, setUser] = useState(null);
   const [settings, setSettings] = useState({ location: '', currency: 'USD' });
   const [cart, setCart] = useState([]);
@@ -263,39 +266,47 @@ export default function App() {
   const removeFromCart = index => setCart(c => c.filter((_, i) => i !== index));
   const clearCart = () => setCart([]);
 
-  const onBack = () => setPage('home');
-  const handleAuth = u => { setUser(u); setPage('home'); };
-  const handleSettings = s => { setSettings(s); setPage('home'); };
+  const handleAuth = u => setUser(u);
+  const handleSettings = s => setSettings(s);
   const handleLogout = () => setUser(null);
 
-  switch (page) {
-    case 'signup':
-      return <Signup onBack={onBack} onSignup={handleAuth} />;
-    case 'login':
-      return <Login onBack={onBack} onLogin={handleAuth} />;
-    case 'settings':
-      return <Settings onBack={onBack} settings={settings} onUpdate={handleSettings} />;
-    case 'payment':
-      return <Payment onBack={onBack} items={cart} onPay={() => { clearCart(); setPage('home'); }} />;
-    case 'cart':
-      return <Cart onBack={onBack} items={cart} onCheckout={() => setPage('payment')} onRemove={removeFromCart} />;
-    case 'tracking':
-      return <OrderTracking onBack={onBack} />;
-    case 'food':
-      return <FoodDelivery onBack={onBack} onAdd={addToCart} />;
-    case 'taxi':
-      return <TaxiService onBack={onBack} />;
-    case 'mart':
-      return <MartDelivery onBack={onBack} onAdd={addToCart} />;
-    case 'porter':
-      return <PorterService onBack={onBack} />;
-    case 'medicine':
-      return <MedicineDelivery onBack={onBack} onAdd={addToCart} />;
-    case 'bike':
-      return <BikeTaxiService onBack={onBack} />;
-    default:
-      return <Home onNavigate={setPage} user={user} onLogout={handleLogout} />;
-  }
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home">
+          {props => <Home {...props} user={user} onLogout={handleLogout} />}
+        </Stack.Screen>
+        <Stack.Screen name="Signup">
+          {props => <Signup {...props} onSignup={handleAuth} />}
+        </Stack.Screen>
+        <Stack.Screen name="Login">
+          {props => <Login {...props} onLogin={handleAuth} />}
+        </Stack.Screen>
+        <Stack.Screen name="Settings">
+          {props => <Settings {...props} settings={settings} onUpdate={handleSettings} />}
+        </Stack.Screen>
+        <Stack.Screen name="Payment">
+          {props => <Payment {...props} items={cart} onPay={clearCart} />}
+        </Stack.Screen>
+        <Stack.Screen name="Cart">
+          {props => <Cart {...props} items={cart} onCheckout={() => props.navigation.navigate('Payment')} onRemove={removeFromCart} />}
+        </Stack.Screen>
+        <Stack.Screen name="Tracking" component={OrderTracking} />
+        <Stack.Screen name="Food">
+          {props => <FoodDelivery {...props} onAdd={addToCart} />}
+        </Stack.Screen>
+        <Stack.Screen name="Taxi" component={TaxiService} />
+        <Stack.Screen name="Mart">
+          {props => <MartDelivery {...props} onAdd={addToCart} />}
+        </Stack.Screen>
+        <Stack.Screen name="Porter" component={PorterService} />
+        <Stack.Screen name="Medicine">
+          {props => <MedicineDelivery {...props} onAdd={addToCart} />}
+        </Stack.Screen>
+        <Stack.Screen name="Bike" component={BikeTaxiService} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 const styles = StyleSheet.create({
