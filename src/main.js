@@ -135,27 +135,76 @@ function Payment({ onBack }) {
 }
 
 function OrderTracking({ onBack }) {
-  const [coords, setCoords] = React.useState({ lat: 1.29, lng: 103.85 });
+  const mapRef = React.useRef(null);
+  const markerRef = React.useRef(null);
+
   React.useEffect(() => {
-    const id = setInterval(() => {
-      setCoords(c => ({ lat: c.lat + 0.001, lng: c.lng + 0.001 }));
-    }, 1000);
+    if (!mapRef.current && window.L) {
+      const start = [1.29, 103.85];
+      const map = L.map('map').setView(start, 15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+      markerRef.current = L.marker(start).addTo(map);
+      mapRef.current = map;
+    }
+
+    const id = setInterval(async () => {
+      try {
+        const res = await fetch('/api/driver');
+        if (res.ok) {
+          const { lat, lng } = await res.json();
+          if (markerRef.current) {
+            markerRef.current.setLatLng([lat, lng]);
+            mapRef.current.setView([lat, lng]);
+          }
+        }
+      } catch (e) {
+        console.error('Failed to fetch driver location', e);
+      }
+    }, 2000);
+
     return () => clearInterval(id);
   }, []);
-  const mapUrl = `https://maps.google.com/?q=${coords.lat},${coords.lng}&z=15&output=embed`;
+
   return React.createElement('div', null,
     BackButton({ onBack }),
     React.createElement('h2', null, 'Driver Tracking'),
-    React.createElement('p', null, `Lat: ${coords.lat.toFixed(3)}, Lng: ${coords.lng.toFixed(3)}`),
-    React.createElement('iframe', { width: '100%', height: '300', src: mapUrl })
+    React.createElement('div', {
+      id: 'map',
+      style: { width: '100%', height: '300px' }
+    })
   );
 }
 
 function FoodDelivery({ onBack }) {
+  const [restaurants, setRestaurants] = React.useState([]);
+
+  React.useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch('/api/restaurants');
+        if (res.ok) {
+          const data = await res.json();
+          setRestaurants(data);
+        }
+      } catch (e) {
+        console.error('Failed to load restaurants', e);
+      }
+    };
+    load();
+  }, []);
+
   return React.createElement('div', null,
     BackButton({ onBack }),
     React.createElement('h2', null, 'Restaurant Delivery'),
-    React.createElement('p', null, 'Browse restaurants and order food.')
+    restaurants.length
+      ? React.createElement('ul', null,
+          restaurants.map(r =>
+            React.createElement('li', { key: r.id }, r.name)
+          )
+        )
+      : React.createElement('p', null, 'Loading...')
   );
 }
 
