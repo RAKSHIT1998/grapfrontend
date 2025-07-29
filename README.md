@@ -31,3 +31,15 @@ endpoint at `/api/driver` that returns JSON with `lat` and `lng` values.
 
 No build step is required as the app still pulls React and other libraries from
 CDNs.
+
+## Running on Expo
+
+A React Native version of the app lives in the `expo` folder. Install its dependencies and start the Expo dev server:
+
+```bash
+cd expo
+npm install
+npx expo start
+```
+
+The API endpoints from the Node server should remain accessible for restaurant data and driver tracking.
