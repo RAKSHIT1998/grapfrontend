@@ -33,6 +33,9 @@ export default function HomeScreen({ onNavigate, user, onLogout }) {
         user ? React.createElement('li', null,
           React.createElement('button', { onClick: () => onNavigate('orders') }, 'My Orders')
         ) : null,
+        user ? React.createElement('li', null,
+          React.createElement('button', { onClick: () => onNavigate('profile') }, 'Profile')
+        ) : null,
         React.createElement('li', null,
           React.createElement('button', { onClick: () => onNavigate('settings') }, 'Settings')
         ),

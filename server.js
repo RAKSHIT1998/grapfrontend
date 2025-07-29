@@ -5,6 +5,7 @@ const app = express();
 const restaurants = require('./routes/restaurants');
 const driver = require('./routes/driver');
 const orders = require('./routes/orders');
+const users = require('./routes/users');
 
 app.use(express.static(path.join(__dirname)));
 app.use(express.json());
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use('/api/restaurants', restaurants);
 app.use('/api/driver', driver);
 app.use('/api/orders', orders);
+app.use('/api/users', users);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
