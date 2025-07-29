@@ -4,12 +4,19 @@
   "main": "App.js",
   "private": true,
   "dependencies": {
+    "@react-navigation/native": "^6.1.8",
+    "@react-navigation/native-stack": "^6.9.12",
     "expo": "^49.0.0",
     "react": "18.2.0",
     "react-native": "0.72.0",
-    "@react-navigation/native": "^6.1.8",
-    "@react-navigation/native-stack": "^6.9.12",
-    "react-native-screens": "^3.29.0",
-    "react-native-safe-area-context": "^4.8.0"
+    "react-native-safe-area-context": "^4.8.0",
+    "react-native-screens": "^3.29.0"
+  },
+  "devDependencies": {
+    "metro": "^0.76.5",
+    "patch-package": "^8.0.0"
+  },
+  "scripts": {
+    "postinstall": "patch-package"
   }
 }
