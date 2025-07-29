@@ -1,6 +1,6 @@
-# Grap Frontend
+# grap Frontend
 
-This is a simple single page application that mimics a Grab style user flow. It
+This is a simple single page application that mimics a grap style user flow. It
 provides placeholder screens for:
 
 - Restaurant delivery with backend data

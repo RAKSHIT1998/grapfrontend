@@ -10,7 +10,7 @@ function BackButton({ onBack }) {
 function Home({ navigation, user, onLogout }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Grab Style App</Text>
+      <Text style={styles.title}>grap</Text>
       {user && <Text>Welcome, {user.username}</Text>}
       <Button title="Restaurant Delivery" onPress={() => navigation.navigate('Food')} />
       <Button title="Taxi Service" onPress={() => navigation.navigate('Taxi')} />
