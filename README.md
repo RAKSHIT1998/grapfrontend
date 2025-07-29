@@ -1,7 +1,18 @@
 # Grap Frontend
 
-This is a minimal frontend application that fetches and displays a list of users from `/api/users`.
+This is a simple single page application that mimics a Grab style user flow. It
+provides placeholder screens for:
 
-## Development
+- Restaurant delivery
+- Taxi service
+- Mart delivery
+- Porter service
+- Medicine delivery
+- Bike taxi service
 
-Open `index.html` in your browser. Ensure the backend exposing the `/api/users` endpoint is running on the same origin or configure CORS accordingly.
+Open `index.html` in your browser to explore the different services. Each
+section is a minimal mock screen that demonstrates basic navigation between the
+home page and the individual services.
+
+No build step is required as the app pulls React from a CDN. A backend is not
+needed for these placeholder screens.
