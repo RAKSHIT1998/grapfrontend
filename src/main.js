@@ -11,49 +11,10 @@ import PorterScreen from "./screens/PorterScreen.js";
 import MedicineScreen from "./screens/MedicineScreen.js";
 import BikeTaxiScreen from "./screens/BikeTaxiScreen.js";
 import OrdersScreen from "./screens/OrdersScreen.js";
+import SignupScreen from "./screens/SignupScreen.js";
+import LoginScreen from "./screens/LoginScreen.js";
+import ProfileScreen from "./screens/ProfileScreen.js";
 import BackButton from "./components/BackButton.js";
-
-function Signup({ onBack, onSignup }) {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  return React.createElement('div', null,
-    BackButton({ onBack }),
-    React.createElement('h2', null, 'Sign Up'),
-    React.createElement('input', {
-      placeholder: 'Username',
-      value: username,
-      onChange: e => setUsername(e.target.value)
-    }),
-    React.createElement('input', {
-      placeholder: 'Password',
-      type: 'password',
-      value: password,
-      onChange: e => setPassword(e.target.value)
-    }),
-    React.createElement('button', { onClick: () => onSignup({ username }) }, 'Sign Up')
-  );
-}
-
-function Login({ onBack, onLogin }) {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  return React.createElement('div', null,
-    BackButton({ onBack }),
-    React.createElement('h2', null, 'Login'),
-    React.createElement('input', {
-      placeholder: 'Username',
-      value: username,
-      onChange: e => setUsername(e.target.value)
-    }),
-    React.createElement('input', {
-      placeholder: 'Password',
-      type: 'password',
-      value: password,
-      onChange: e => setPassword(e.target.value)
-    }),
-    React.createElement('button', { onClick: () => onLogin({ username }) }, 'Login')
-  );
-}
 
 function Settings({ onBack, settings, onUpdate }) {
   const [location, setLocation] = React.useState(settings.location || '');
@@ -127,9 +88,11 @@ function App() {
 
   switch(page) {
     case 'signup':
-      return Signup({ onBack, onSignup: handleAuth });
+      return SignupScreen({ onBack, onSignup: handleAuth });
     case 'login':
-      return Login({ onBack, onLogin: handleAuth });
+      return LoginScreen({ onBack, onLogin: handleAuth });
+    case 'profile':
+      return ProfileScreen({ onBack, user, onUpdate: u => { setUser(u); setPage('home'); } });
     case 'settings':
       return Settings({ onBack, settings, onUpdate: handleSettings });
     case 'payment':

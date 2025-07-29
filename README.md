@@ -10,6 +10,7 @@ provides placeholder screens for:
 - Medicine delivery with quick medicine order
 - Bike taxi service with ride booking form
 - User signup and login
+- Customer profile management
 - Payment flow (simulated)
 - Simple cart with checkout
 - Order history screen
@@ -32,7 +33,7 @@ Open `index.html` in your browser to explore the different services. Each
 section is a minimal mock screen that demonstrates basic navigation between the
 home page and the individual services.
 
-Authentication remains simulated, but orders are now persisted on the backend.
+Authentication is handled via simple in-memory API endpoints, and orders are persisted on the backend.
 After checking out, the cart items are sent to `/api/orders` which stores the
 order in memory. The driver tracking screen requests location updates from your
 backend at `/api/driver`.
