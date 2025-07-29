@@ -16,6 +16,7 @@ function Home({ onNavigate, user, onLogout }) {
       <Button title="Porter Service" onPress={() => onNavigate('porter')} />
       <Button title="Medicine Delivery" onPress={() => onNavigate('medicine')} />
       <Button title="Bike Taxi" onPress={() => onNavigate('bike')} />
+      <Button title="Cart" onPress={() => onNavigate('cart')} />
       {user && (
         <>
           <Button title="Payment" onPress={() => onNavigate('payment')} />
@@ -77,12 +78,47 @@ function Settings({ onBack, settings, onUpdate }) {
   );
 }
 
-function Payment({ onBack }) {
+function Payment({ onBack, items, onPay }) {
   return (
     <View style={styles.container}>
       <BackButton onBack={onBack} />
       <Text style={styles.subtitle}>Payment</Text>
-      <Button title="Pay Now" onPress={() => alert('Payment completed (simulated).')} />
+      {items.length ? (
+        <FlatList
+          data={items}
+          keyExtractor={(_, i) => String(i)}
+          renderItem={({ item }) => (
+            <Text>{item.name} x {item.qty}</Text>
+          )}
+        />
+      ) : (
+        <Text>Cart is empty</Text>
+      )}
+      <Button title="Pay Now" disabled={!items.length} onPress={() => { alert('Payment completed (simulated).'); onPay(); }} />
+    </View>
+  );
+}
+
+function Cart({ onBack, items, onCheckout, onRemove }) {
+  return (
+    <View style={styles.container}>
+      <BackButton onBack={onBack} />
+      <Text style={styles.subtitle}>Cart</Text>
+      {items.length ? (
+        <FlatList
+          data={items}
+          keyExtractor={(_, i) => String(i)}
+          renderItem={({ item, index }) => (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ marginRight: 8 }}>{item.name} x {item.qty}</Text>
+              <Button title="Remove" onPress={() => onRemove(index)} />
+            </View>
+          )}
+        />
+      ) : (
+        <Text>Cart is empty</Text>
+      )}
+      <Button title="Checkout" disabled={!items.length} onPress={onCheckout} />
     </View>
   );
 }
@@ -112,7 +148,7 @@ function OrderTracking({ onBack }) {
   );
 }
 
-function FoodDelivery({ onBack }) {
+function FoodDelivery({ onBack, onAdd }) {
   const [restaurants, setRestaurants] = useState([]);
   useEffect(() => {
     const load = async () => {
@@ -134,7 +170,12 @@ function FoodDelivery({ onBack }) {
       <FlatList
         data={restaurants}
         keyExtractor={item => String(item.id)}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
+        renderItem={({ item }) => (
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ marginRight: 8 }}>{item.name}</Text>
+            <Button title="Add" onPress={() => onAdd({ name: item.name, qty: 1 })} />
+          </View>
+        )}
       />
     </View>
   );
@@ -154,7 +195,7 @@ function TaxiService({ onBack }) {
   );
 }
 
-function MartDelivery({ onBack }) {
+function MartDelivery({ onBack, onAdd }) {
   const [item, setItem] = useState('');
   const [quantity, setQuantity] = useState('1');
   return (
@@ -163,7 +204,7 @@ function MartDelivery({ onBack }) {
       <Text style={styles.subtitle}>Mart Delivery</Text>
       <TextInput placeholder="Item" value={item} onChangeText={setItem} style={styles.input} />
       <TextInput placeholder="Quantity" value={quantity} onChangeText={setQuantity} style={styles.input} keyboardType="numeric" />
-      <Button title="Place Order" onPress={() => { alert(`Ordered ${quantity} x ${item}`); setItem(''); setQuantity('1'); }} />
+      <Button title="Add to Cart" onPress={() => { if (item) { onAdd({ name: item, qty: quantity }); setItem(''); setQuantity('1'); } }} />
     </View>
   );
 }
@@ -184,7 +225,7 @@ function PorterService({ onBack }) {
   );
 }
 
-function MedicineDelivery({ onBack }) {
+function MedicineDelivery({ onBack, onAdd }) {
   const [medicine, setMedicine] = useState('');
   const [quantity, setQuantity] = useState('1');
   return (
@@ -193,7 +234,7 @@ function MedicineDelivery({ onBack }) {
       <Text style={styles.subtitle}>Medicine Delivery</Text>
       <TextInput placeholder="Medicine name" value={medicine} onChangeText={setMedicine} style={styles.input} />
       <TextInput placeholder="Quantity" value={quantity} onChangeText={setQuantity} style={styles.input} keyboardType="numeric" />
-      <Button title="Order Now" onPress={() => { alert(`Ordered ${quantity} x ${medicine}`); setMedicine(''); setQuantity('1'); }} />
+      <Button title="Add to Cart" onPress={() => { if(medicine){ onAdd({ name: medicine, qty: quantity }); setMedicine(''); setQuantity('1'); } }} />
     </View>
   );
 }
@@ -216,6 +257,11 @@ export default function App() {
   const [page, setPage] = useState('home');
   const [user, setUser] = useState(null);
   const [settings, setSettings] = useState({ location: '', currency: 'USD' });
+  const [cart, setCart] = useState([]);
+
+  const addToCart = item => setCart(c => [...c, item]);
+  const removeFromCart = index => setCart(c => c.filter((_, i) => i !== index));
+  const clearCart = () => setCart([]);
 
   const onBack = () => setPage('home');
   const handleAuth = u => { setUser(u); setPage('home'); };
@@ -230,19 +276,21 @@ export default function App() {
     case 'settings':
       return <Settings onBack={onBack} settings={settings} onUpdate={handleSettings} />;
     case 'payment':
-      return <Payment onBack={onBack} />;
+      return <Payment onBack={onBack} items={cart} onPay={() => { clearCart(); setPage('home'); }} />;
+    case 'cart':
+      return <Cart onBack={onBack} items={cart} onCheckout={() => setPage('payment')} onRemove={removeFromCart} />;
     case 'tracking':
       return <OrderTracking onBack={onBack} />;
     case 'food':
-      return <FoodDelivery onBack={onBack} />;
+      return <FoodDelivery onBack={onBack} onAdd={addToCart} />;
     case 'taxi':
       return <TaxiService onBack={onBack} />;
     case 'mart':
-      return <MartDelivery onBack={onBack} />;
+      return <MartDelivery onBack={onBack} onAdd={addToCart} />;
     case 'porter':
       return <PorterService onBack={onBack} />;
     case 'medicine':
-      return <MedicineDelivery onBack={onBack} />;
+      return <MedicineDelivery onBack={onBack} onAdd={addToCart} />;
     case 'bike':
       return <BikeTaxiService onBack={onBack} />;
     default:
