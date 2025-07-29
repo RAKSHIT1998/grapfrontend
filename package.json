@@ -1,7 +1,7 @@
 {
   "name": "grapfrontend-server",
   "version": "1.0.0",
-  "description": "Backend server for Grap Frontend demo",
+  "description": "Backend server for grap frontend demo",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

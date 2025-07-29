@@ -3,7 +3,7 @@ import React from 'https://esm.sh/react@18';
 export default function HomeScreen({ onNavigate, user, onLogout }) {
   return (
     React.createElement('div', null,
-      React.createElement('h1', null, 'Grab Style App'),
+      React.createElement('h1', null, 'grap'),
       user ? React.createElement('p', null, `Welcome, ${user.username}`) : null,
       React.createElement('ul', null,
         React.createElement('li', null,
