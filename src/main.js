@@ -19,6 +19,7 @@ import BackButton from "./components/BackButton.js";
 function Settings({ onBack, settings, onUpdate }) {
   const [location, setLocation] = React.useState(settings.location || '');
   const [currency, setCurrency] = React.useState(settings.currency || 'USD');
+  const [theme, setTheme] = React.useState(settings.theme || 'light');
   return React.createElement('div', null,
     BackButton({ onBack }),
     React.createElement('h2', null, 'Customer Settings'),
@@ -37,11 +38,21 @@ function Settings({ onBack, settings, onUpdate }) {
       },
         React.createElement('option', { value: 'USD' }, 'USD'),
         React.createElement('option', { value: 'EUR' }, 'EUR'),
-        React.createElement('option', { value: 'SGD' }, 'SGD')
+      React.createElement('option', { value: 'SGD' }, 'SGD')
+      )
+    ),
+    React.createElement('div', null,
+      React.createElement('label', null, 'Theme:'),
+      React.createElement('select', {
+        value: theme,
+        onChange: e => setTheme(e.target.value)
+      },
+        React.createElement('option', { value: 'light' }, 'Light'),
+        React.createElement('option', { value: 'dark' }, 'Dark')
       )
     ),
     React.createElement('button', {
-      onClick: () => onUpdate({ location, currency })
+      onClick: () => onUpdate({ location, currency, theme })
     }, 'Save')
   );
 }
@@ -73,8 +84,12 @@ function Cart({ onBack, items, onCheckout, onRemove }) {
 function App() {
   const [page, setPage] = React.useState('home');
   const [user, setUser] = React.useState(null);
-  const [settings, setSettings] = React.useState({ location: '', currency: 'USD' });
+  const [settings, setSettings] = React.useState({ location: '', currency: 'USD', theme: 'light' });
   const [cart, setCart] = React.useState([]);
+
+  React.useEffect(() => {
+    document.body.dataset.theme = settings.theme || 'light';
+  }, [settings.theme]);
 
   const addToCart = item => setCart(c => [...c, item]);
   const removeFromCart = idx => setCart(c => c.filter((_, i) => i !== idx));

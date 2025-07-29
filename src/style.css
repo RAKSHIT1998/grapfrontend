@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+body[data-theme='dark'] {
+  background-color: #222;
+  color: #eee;
+}
+body[data-theme='light'] {
+  background-color: #fff;
+  color: #000;
+}
+button {
+  margin: 4px;
+}

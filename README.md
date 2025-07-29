@@ -15,7 +15,7 @@ provides placeholder screens for:
 - Simple cart with checkout
 - Order history screen
 - Interactive driver location tracking map
-- Customer settings for location and currency
+- Customer settings for location, currency and theme (light/dark)
 
 Items selected from the service screens can be added to a small in-memory cart.
 The cart page allows reviewing items and leads to the simulated payment flow.
