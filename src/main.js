@@ -10,6 +10,7 @@ import MartScreen from "./screens/MartScreen.js";
 import PorterScreen from "./screens/PorterScreen.js";
 import MedicineScreen from "./screens/MedicineScreen.js";
 import BikeTaxiScreen from "./screens/BikeTaxiScreen.js";
+import OrdersScreen from "./screens/OrdersScreen.js";
 import BackButton from "./components/BackButton.js";
 
 function Signup({ onBack, onSignup }) {
@@ -113,6 +114,7 @@ function App() {
   const [user, setUser] = React.useState(null);
   const [settings, setSettings] = React.useState({ location: '', currency: 'USD' });
   const [cart, setCart] = React.useState([]);
+  const [orders, setOrders] = React.useState([]);
 
   const addToCart = item => setCart(c => [...c, item]);
   const removeFromCart = idx => setCart(c => c.filter((_, i) => i !== idx));
@@ -131,11 +133,17 @@ function App() {
     case 'settings':
       return Settings({ onBack, settings, onUpdate: handleSettings });
     case 'payment':
-      return PaymentScreen({ onBack, items: cart, onPay: () => { clearCart(); setPage('home'); } });
+      return PaymentScreen({ onBack, items: cart, onPay: () => {
+        setOrders(o => [...o, { id: Date.now(), items: cart, status: 'Pending' }]);
+        clearCart();
+        setPage('orders');
+      } });
     case 'cart':
       return Cart({ onBack, items: cart, onCheckout: () => setPage('payment'), onRemove: removeFromCart });
     case 'tracking':
       return TrackingScreen({ onBack });
+    case 'orders':
+      return OrdersScreen({ onBack, orders });
     case 'food':
       return FoodDeliveryScreen({ onBack, onAdd: addToCart });
     case 'taxi':

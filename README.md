@@ -12,6 +12,7 @@ provides placeholder screens for:
 - User signup and login
 - Payment flow (simulated)
 - Simple cart with checkout
+- Order history screen
 - Interactive driver location tracking map
 - Customer settings for location and currency
 
