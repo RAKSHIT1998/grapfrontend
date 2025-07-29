@@ -4,11 +4,11 @@ This is a simple single page application that mimics a Grab style user flow. It
 provides placeholder screens for:
 
 - Restaurant delivery with backend data
-- Taxi service
-- Mart delivery
-- Porter service
-- Medicine delivery
-- Bike taxi service
+- Taxi service with simple booking form
+- Mart delivery with item order form
+- Porter service with package booking form
+- Medicine delivery with quick medicine order
+- Bike taxi service with ride booking form
 - User signup and login
 - Payment flow (simulated)
 - Interactive driver location tracking map
@@ -16,6 +16,10 @@ provides placeholder screens for:
 
 The food delivery page fetches restaurant data from `/api/restaurants`. The
 driver tracking view polls `/api/driver` for current location updates.
+
+Each service page now includes a minimal form so you can simulate placing
+orders or booking rides directly in the browser. These actions simply trigger
+alerts but demonstrate the expected user flow for a combined super-app.
 
 Open `index.html` in your browser to explore the different services. Each
 section is a minimal mock screen that demonstrates basic navigation between the

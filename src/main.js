@@ -209,42 +209,146 @@ function FoodDelivery({ onBack }) {
 }
 
 function TaxiService({ onBack }) {
+  const [pickup, setPickup] = React.useState('');
+  const [dropoff, setDropoff] = React.useState('');
+  const book = () => {
+    alert(`Taxi booked from ${pickup} to ${dropoff}`);
+    setPickup('');
+    setDropoff('');
+  };
   return React.createElement('div', null,
     BackButton({ onBack }),
     React.createElement('h2', null, 'Taxi Service'),
-    React.createElement('p', null, 'Book a taxi to your destination.')
+    React.createElement('div', null,
+      React.createElement('input', {
+        placeholder: 'Pick-up location',
+        value: pickup,
+        onChange: e => setPickup(e.target.value)
+      }),
+      React.createElement('input', {
+        placeholder: 'Drop-off location',
+        value: dropoff,
+        onChange: e => setDropoff(e.target.value)
+      }),
+      React.createElement('button', { onClick: book }, 'Book Taxi')
+    )
   );
 }
 
 function MartDelivery({ onBack }) {
+  const [item, setItem] = React.useState('');
+  const [quantity, setQuantity] = React.useState('1');
+  const order = () => {
+    alert(`Ordered ${quantity} x ${item}`);
+    setItem('');
+    setQuantity('1');
+  };
   return React.createElement('div', null,
     BackButton({ onBack }),
     React.createElement('h2', null, 'Mart Delivery'),
-    React.createElement('p', null, 'Get groceries and daily needs delivered.')
+    React.createElement('div', null,
+      React.createElement('input', {
+        placeholder: 'Item',
+        value: item,
+        onChange: e => setItem(e.target.value)
+      }),
+      React.createElement('input', {
+        type: 'number',
+        min: 1,
+        value: quantity,
+        onChange: e => setQuantity(e.target.value)
+      }),
+      React.createElement('button', { onClick: order }, 'Place Order')
+    )
   );
 }
 
 function PorterService({ onBack }) {
+  const [pickup, setPickup] = React.useState('');
+  const [dropoff, setDropoff] = React.useState('');
+  const [description, setDescription] = React.useState('');
+  const book = () => {
+    alert(`Porter booked: ${description} from ${pickup} to ${dropoff}`);
+    setPickup('');
+    setDropoff('');
+    setDescription('');
+  };
   return React.createElement('div', null,
     BackButton({ onBack }),
     React.createElement('h2', null, 'Porter Service'),
-    React.createElement('p', null, 'Send packages and documents across town.')
+    React.createElement('div', null,
+      React.createElement('input', {
+        placeholder: 'Package description',
+        value: description,
+        onChange: e => setDescription(e.target.value)
+      }),
+      React.createElement('input', {
+        placeholder: 'Pick-up address',
+        value: pickup,
+        onChange: e => setPickup(e.target.value)
+      }),
+      React.createElement('input', {
+        placeholder: 'Drop-off address',
+        value: dropoff,
+        onChange: e => setDropoff(e.target.value)
+      }),
+      React.createElement('button', { onClick: book }, 'Book Porter')
+    )
   );
 }
 
 function MedicineDelivery({ onBack }) {
+  const [medicine, setMedicine] = React.useState('');
+  const [quantity, setQuantity] = React.useState('1');
+  const order = () => {
+    alert(`Ordered ${quantity} x ${medicine}`);
+    setMedicine('');
+    setQuantity('1');
+  };
   return React.createElement('div', null,
     BackButton({ onBack }),
     React.createElement('h2', null, 'Medicine Delivery'),
-    React.createElement('p', null, 'Order medicines and health products.')
+    React.createElement('div', null,
+      React.createElement('input', {
+        placeholder: 'Medicine name',
+        value: medicine,
+        onChange: e => setMedicine(e.target.value)
+      }),
+      React.createElement('input', {
+        type: 'number',
+        min: 1,
+        value: quantity,
+        onChange: e => setQuantity(e.target.value)
+      }),
+      React.createElement('button', { onClick: order }, 'Order Now')
+    )
   );
 }
 
 function BikeTaxiService({ onBack }) {
+  const [pickup, setPickup] = React.useState('');
+  const [dropoff, setDropoff] = React.useState('');
+  const book = () => {
+    alert(`Bike taxi booked from ${pickup} to ${dropoff}`);
+    setPickup('');
+    setDropoff('');
+  };
   return React.createElement('div', null,
     BackButton({ onBack }),
     React.createElement('h2', null, 'Bike Taxi Service'),
-    React.createElement('p', null, 'Quick two-wheeler rides around the city.')
+    React.createElement('div', null,
+      React.createElement('input', {
+        placeholder: 'Pick-up point',
+        value: pickup,
+        onChange: e => setPickup(e.target.value)
+      }),
+      React.createElement('input', {
+        placeholder: 'Drop-off point',
+        value: dropoff,
+        onChange: e => setDropoff(e.target.value)
+      }),
+      React.createElement('button', { onClick: book }, 'Book Ride')
+    )
   );
 }
 
