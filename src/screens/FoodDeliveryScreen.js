@@ -1,7 +1,7 @@
 import React from 'https://esm.sh/react@18';
 import BackButton from '../components/BackButton.js';
 
-export default function FoodDeliveryScreen({ onBack, onAdd }) {
+export default function FoodDeliveryScreen({ onBack, onOrder }) {
   const [restaurants, setRestaurants] = React.useState([]);
 
   React.useEffect(() => {
@@ -28,7 +28,7 @@ export default function FoodDeliveryScreen({ onBack, onAdd }) {
             React.createElement('li', { key: r.id },
               r.name,
               ' ',
-              React.createElement('button', { onClick: () => onAdd({ name: r.name, qty: 1 }) }, 'Add')
+              React.createElement('button', { onClick: () => onOrder({ name: r.name, qty: 1, price: 12 }) }, 'Order')
             )
           )
         )

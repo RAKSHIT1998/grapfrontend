@@ -1,12 +1,12 @@
 import React from 'https://esm.sh/react@18';
 import BackButton from '../components/BackButton.js';
 
-export default function MedicineScreen({ onBack, onAdd }) {
+export default function MedicineScreen({ onBack, onOrder }) {
   const [medicine, setMedicine] = React.useState('');
   const [quantity, setQuantity] = React.useState('1');
   const add = () => {
     if (!medicine) return;
-    onAdd({ name: medicine, qty: quantity });
+    onOrder({ name: medicine, qty: quantity, price: 8 });
     setMedicine('');
     setQuantity('1');
   };
@@ -25,7 +25,7 @@ export default function MedicineScreen({ onBack, onAdd }) {
         value: quantity,
         onChange: e => setQuantity(e.target.value)
       }),
-      React.createElement('button', { onClick: add }, 'Add to Cart')
+      React.createElement('button', { onClick: add }, 'Checkout')
     )
   );
 }
